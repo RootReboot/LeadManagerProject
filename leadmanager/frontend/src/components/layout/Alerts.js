@@ -5,10 +5,11 @@ import { PropTypes } from "prop-types";
 
 export class Alerts extends Component {
   static propTypes = {
-    error: PropTypes.object.isRequired
+    error: PropTypes.object.isRequired,
+    message: PropTypes.object.isRequired
   };
 
-  componentDidUpdate(prevProps) {
+  checkLeadErrorMessages = prevProps => {
     const { error, alert } = this.props;
     if (prevProps.error != error) {
       if (error.msg.name) {
@@ -21,6 +22,23 @@ export class Alerts extends Component {
         alert.error(`Message: ${error.msg.message.join()}`);
       }
     }
+  };
+
+  checkLeadSucessMessages = prevProps => {
+    const { message, alert } = this.props;
+    if (prevProps.message != message) {
+      if (message.deleteLead) {
+        alert.success(message.deleteLead);
+      }
+      if (message.addLead) {
+        alert.success(message.addLead);
+      }
+    }
+  };
+
+  componentDidUpdate(prevProps) {
+    this.checkLeadErrorMessages(prevProps);
+    this.checkLeadSucessMessages(prevProps);
   }
 
   render() {
@@ -29,7 +47,8 @@ export class Alerts extends Component {
 }
 
 const mapStateToProps = state => ({
-  error: state.errorsReducer
+  error: state.errorsReducer,
+  message: state.messagesReducer
 });
 
 export default connect(mapStateToProps)(withAlert()(Alerts));

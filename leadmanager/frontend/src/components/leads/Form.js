@@ -20,8 +20,12 @@ export class Form extends Component {
     event.preventDefault();
     const { name, email, message } = this.state;
     const lead = { name, email, message };
-    console.log(lead);
     this.props.addLead(lead);
+    this.setState({
+      name: "",
+      email: "",
+      message: ""
+    });
   };
 
   render() {
