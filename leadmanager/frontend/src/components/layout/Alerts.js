@@ -12,6 +12,7 @@ export class Alerts extends Component {
   checkLeadErrorMessages = prevProps => {
     const { error, alert } = this.props;
     if (prevProps.error != error) {
+      //Leads add error
       if (error.msg.name) {
         alert.error(`Name: ${error.msg.name.join()}`);
       }
@@ -20,6 +21,10 @@ export class Alerts extends Component {
       }
       if (error.msg.message) {
         alert.error(`Message: ${error.msg.message.join()}`);
+      }
+      // LOGIN
+      if (error.msg.detail) {
+        alert.error(`Login: ${error.msg.detail}`);
       }
     }
   };
