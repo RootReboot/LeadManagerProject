@@ -5,8 +5,9 @@ import {
   USER_LOADED,
   USER_LOADING,
   AUTH_ERROR,
-  LOGIN_SUCESS,
-  LOGIN_FAIL
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+  LOGOUT_SUCCESS
 } from "./types";
 
 //CHECK TOKEN AND LOAD USER
@@ -16,19 +17,8 @@ export const loadUser = () => (dispatch, getState) => {
     type: USER_LOADING
   });
 
-  //Get token from state
-  const token = getState().authReducer.token;
+  config = tokenConfig(getState);
 
-  //Headers
-  const config = {
-    headers: {
-      "Content-Type": "application/json"
-    }
-  };
-  //If token, add to headers config
-  if (token) {
-    config.headers["Authorization"] = `Token ${token}`;
-  }
   axios
     .get("/api/auth/user", config)
     .then(res => {
@@ -61,7 +51,50 @@ export const loginUser = (username, password) => dispatch => {
     .post("/api/auth/login", body, config)
     .then(res => {
       dispatch({
-        type: LOGIN_SUCESS,
+        type: REGISTER_SUCCESS,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+      dispatch({
+        type: REGISTER_FAIL
+      });
+    });
+};
+
+//LOGOUT USER
+export const logout = () => (dispatch, getState) => {
+  config = tokenConfig(getState);
+
+  axios
+    .post("/api/auth/logout/", null, config)
+    .then(res => {
+      dispatch({
+        type: LOGOUT_SUCCESS
+      });
+    })
+    .catch(err => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
+};
+
+export const registerUser = ({ username, email, password }) => dispatch => {
+  //Headers
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  // Request Body
+  const body = JSON.stringify({ username, email, password });
+
+  axios
+    .post("/api/auth/register", body, config)
+    .then(res => {
+      dispatch({
+        type: REGISTER_SUCCESS,
         payload: res.data
       });
     })
@@ -71,4 +104,23 @@ export const loginUser = (username, password) => dispatch => {
         type: LOGIN_FAIL
       });
     });
+};
+
+//Setup config with token -helper
+export const tokenConfig = getState => {
+  //Get token from state
+  const token = getState().authReducer.token;
+
+  //Headers
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+  //If token, add to headers config
+  if (token) {
+    config.headers["Authorization"] = `Token ${token}`;
+  }
+
+  return config;
 };

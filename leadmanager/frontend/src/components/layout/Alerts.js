@@ -22,10 +22,16 @@ export class Alerts extends Component {
       if (error.msg.message) {
         alert.error(`Message: ${error.msg.message.join()}`);
       }
+      //Credentials
+      if (error.msg.non_field_errors) {
+        alert.error(error.msg.non_field_errors.join());
+      }
       // LOGIN
+      /*
       if (error.msg.detail) {
         alert.error(`Login: ${error.msg.detail}`);
       }
+      */
     }
   };
 
