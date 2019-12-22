@@ -9,7 +9,7 @@ export class Alerts extends Component {
     message: PropTypes.object.isRequired
   };
 
-  checkLeadErrorMessages = prevProps => {
+  checkErrorMessages = prevProps => {
     const { error, alert } = this.props;
     if (prevProps.error != error) {
       //Leads add error
@@ -21,6 +21,10 @@ export class Alerts extends Component {
       }
       if (error.msg.message) {
         alert.error(`Message: ${error.msg.message.join()}`);
+      }
+      //Register
+      if (error.msg.username) {
+        alert.error(error.msg.username.join());
       }
       //Credentials
       if (error.msg.non_field_errors) {
@@ -35,7 +39,7 @@ export class Alerts extends Component {
     }
   };
 
-  checkLeadSucessMessages = prevProps => {
+  checkMessages = prevProps => {
     const { message, alert } = this.props;
     if (prevProps.message != message) {
       if (message.deleteLead) {
@@ -44,12 +48,15 @@ export class Alerts extends Component {
       if (message.addLead) {
         alert.success(message.addLead);
       }
+      if (message.passwordsNotMatch) {
+        alert.error(message.passwordsNotMatch);
+      }
     }
   };
 
   componentDidUpdate(prevProps) {
-    this.checkLeadErrorMessages(prevProps);
-    this.checkLeadSucessMessages(prevProps);
+    this.checkErrorMessages(prevProps);
+    this.checkMessages(prevProps);
   }
 
   render() {
