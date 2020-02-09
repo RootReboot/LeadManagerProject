@@ -2,7 +2,7 @@
 
 Based on https://www.youtube.com/watch?v=Uyei2iDA4Hs&list=PLillGF-RfqbbRA-CIUxlxkUpbq0IFkX60&index=1 from TraversyMedia.
 
-Project that applies the basic of the django was an api and uses react with webpack and babel to act was a frontend of the system.
+Project that applies the basic of the django to create an api and uses react with webpack and babel to build a frontend of the system.
 React app created without using create-react-app.
 
 Users can register their leads. Each user has a private lead list that only they can see when they login. A person can register to app freely but it can't have the same username that an user already has. The app doesn't check how strong the password is.
